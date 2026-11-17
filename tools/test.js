@@ -19,7 +19,7 @@ const ROOT = path.join(__dirname, '..');
   let found = null;
   while (Date.now() - t0 < 60000 && !found) { await p.waitForTimeout(500); found = await p.evaluate(() => window.__found || null); }
   console.log('распознан бланк:', found, 'за', ((Date.now() - t0) / 1000).toFixed(1), 'с');
-  for (const [i, ms] of [[1, 4000]]) { await p.waitForTimeout(ms); await p.screenshot({ path: path.join(ROOT, `test/shot-${i}.png`) }); }
+  for (const [i, ms] of [[1, 3000], [2, 9000]]) { await p.waitForTimeout(ms); await p.screenshot({ path: path.join(ROOT, `test/shot-${i}.png`) }); }
   console.log('ошибки:', [...new Set(errs)].slice(0, 8));
   await b.close(); srv.close();
 })().catch((e) => { console.error(e); process.exit(1); });

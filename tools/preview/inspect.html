@@ -1,0 +1,12 @@
+<!doctype html><html><head><meta charset="utf-8"><script type="importmap">{"imports":{"three":"/public/vendor/three.module.min.js","three/addons/":"/public/vendor/addons/"}}</script></head><body><script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+const g = await new GLTFLoader().loadAsync('/public/assets/models/VBvzjFIYws.glb');
+const out = { mats: [], bones: [], meshes: [] };
+g.scene.traverse(o => {
+  if (o.isBone) out.bones.push(o.name);
+  if (o.isMesh) { out.meshes.push(o.name + ' skinned=' + !!o.isSkinnedMesh + ' verts=' + o.geometry.attributes.position.count); [].concat(o.material).forEach(m => out.mats.push(m.name + ' ' + m.type + ' #' + m.color.getHexString() + ' flat=' + m.flatShading + ' vc=' + m.vertexColors)); }
+});
+out.root = g.scene.children.map(c => c.name + ' scale=' + c.scale.toArray().map(v=>+v.toFixed(3)) + ' rot=' + c.rotation.toArray().slice(0,3).map(v=>+v.toFixed(2)));
+window.__info = out; window.__done = true;
+</script></body></html>

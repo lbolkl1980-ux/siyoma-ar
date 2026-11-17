@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><script type="importmap">{"imports":{"three":"/public/vendor/three.module.min.js","three/addons/":"/public/vendor/addons/"}}</script>
+<style>body{margin:0;background:#223}</style></head><body><script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); r.setSize(1200, 400); document.body.appendChild(r.domElement);
+r.outputColorSpace = THREE.SRGBColorSpace;
+const ids = ['VBvzjFIYws', 'LlwD0QNUPj', '3rUm1cN3yp'];
+const info = [];
+const scenes = [];
+for (const id of ids) {
+  const g = await new GLTFLoader().loadAsync('/public/assets/models/' + id + '.glb');
+  const s = new THREE.Scene(); s.background = new THREE.Color('#2a3045');
+  s.add(new THREE.HemisphereLight('#fff', '#445', 2.5)); const dl = new THREE.DirectionalLight('#fff', 2); dl.position.set(3, 5, 4); s.add(dl);
+  s.add(g.scene); g.scene.updateMatrixWorld(true);
+  g.scene.traverse(o => { if (o.isSkinnedMesh) { o.skeleton.update(); o.computeBoundingBox(); o.computeBoundingSphere(); } });
+  const box = new THREE.Box3().setFromObject(g.scene, true); const size = box.getSize(new THREE.Vector3()); const c = box.getCenter(new THREE.Vector3());
+  g.scene.position.sub(c);
+  const cam = new THREE.PerspectiveCamera(40, 1, .01, 1000); const d = Math.max(size.x, size.y, size.z) * 1.6; cam.position.set(d * .7, d * .35, d * .8); cam.lookAt(0, 0, 0);
+  const mixer = new THREE.AnimationMixer(g.scene);
+  const pick = window.ANIM ? g.animations.find(a => a.name.match(window.ANIM)) : null;
+  const clip = pick || g.animations.find(a => /fly|flying/i.test(a.name)) || g.animations[0];
+  if (clip) { mixer.clipAction(clip).play(); mixer.update(clip.duration * .3); }
+  info.push({ id, size: size.toArray().map(v => +v.toFixed(2)), anims: g.animations.map(a => a.name + ':' + a.duration.toFixed(1)), played: clip && clip.name });
+  scenes.push([s, cam]);
+}
+r.setScissorTest(true);
+scenes.forEach(([s, cam], i) => { r.setViewport(i * 400, 0, 400, 400); r.setScissor(i * 400, 0, 400, 400); r.render(s, cam); });
+window.__info = info; window.__done = true;
+</script></body></html>

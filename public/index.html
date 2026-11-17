@@ -27,6 +27,13 @@
   #links.show{display:flex}
   #links a{background:#0E0F15dd;border:1px solid #FFD21F88;color:#fff;text-decoration:none;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:600}
   #err{display:none}
+  #flash{position:fixed;inset:0;pointer-events:none;opacity:0;z-index:9;mix-blend-mode:screen}
+  .ghost{margin-top:14px;background:transparent;color:#DDE6F2;border:1px solid #ffffff44;border-radius:14px;padding:13px 26px;font-size:15px;font-weight:600}
+  #mute{position:fixed;top:calc(14px + env(safe-area-inset-top));right:14px;z-index:12;width:44px;height:44px;border-radius:50%;border:1px solid #ffffff33;background:#0E0F15aa;color:#fff;font-size:20px;display:none}
+  #mute.show{display:block}
+  #demo-bar{position:fixed;left:0;right:0;top:calc(14px + env(safe-area-inset-top));display:none;justify-content:center;z-index:11;pointer-events:none}
+  #demo-bar.show{display:flex}
+  #demo-bar button{pointer-events:auto;background:#0E0F15cc;color:#fff;border:1px solid #FFD21F88;border-radius:20px;padding:9px 16px;font-size:14px;font-weight:600}
 </style>
 </head>
 <body>
@@ -35,8 +42,9 @@
   <img class="logo" src="assets/logo.png" alt="SIYOMA">
   <img class="dragon" src="assets/dragon.png" alt="">
   <h1>Оживите свой сертификат</h1>
-  <p>Нажмите кнопку и наведите камеру на сертификат целиком — дракон выйдет из бумаги.</p>
+  <p>Нажмите кнопку и наведите камеру на сертификат целиком — дракон вылетит из бумаги. Включите звук 🔊</p>
   <button class="btn" id="go">🔥 Оживить дракона</button>
+  <button class="ghost" id="demo">Посмотреть без сертификата</button>
   <div class="brand">FIRE ENERGY DRAG<b>ON</b></div>
 </div>
 <div id="err" class="screen">
@@ -46,6 +54,9 @@
 </div>
 <div id="hint" class="hide"><span>Наведите камеру на сертификат целиком</span></div>
 <div id="links"></div>
+<div id="flash"></div>
+<button id="mute">🔊</button>
+<div id="demo-bar"><button id="replay">↻ Ещё раз</button></div>
 <script type="module" src="app.js"></script>
 </body>
 </html>
